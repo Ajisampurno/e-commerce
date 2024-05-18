@@ -41,10 +41,14 @@
       <section class="max-w-full mx-auto mt-11">
         <Carousel />
       </section>
+      <!--Categorie-->
+      <section class="max-w-6xl mx-auto mt-11">
+        <Categorie />
+      </section>
       <!--Product-->
       <section class="max-w-6xl mx-auto mt-11">
         <h2 class="text-2xl font-semibold mb-4">Products</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           <div
             v-for="product in filteredProducts"
             :key="product.id"
@@ -106,6 +110,7 @@
 import axios from 'axios'
 import Carousel from '@/components/Carousel.vue'
 import Footer from '@/components/Footer.vue'
+import Categorie from '@/components/Categorie.vue'
 
 export default {
   data() {
@@ -119,7 +124,8 @@ export default {
   },
   components: {
     Carousel,
-    Footer
+    Footer,
+    Categorie
   },
   methods: {
     async fetchData() {

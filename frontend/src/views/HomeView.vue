@@ -38,10 +38,9 @@
 
     <main class="py-8">
       <!--Carousel-->
-      <section class="max-w-6xl mx-auto mt-11">
+      <section class="max-w-full mx-auto mt-11">
         <Carousel />
       </section>
-
       <!--Product-->
       <section class="max-w-6xl mx-auto mt-11">
         <h2 class="text-2xl font-semibold mb-4">Products</h2>

@@ -1,7 +1,7 @@
 <template>
   <div class="carousel" @mouseover="stopSlide" @mouseleave="startSlide">
     <div v-for="(item, index) in items" :key="index" :class="{ hidden: index !== activeIndex }">
-      <img :src="item.image" :alt="item.alt" class="mx-auto" />
+      <img :src="item.image" :alt="item.alt" class="mx-auto min-w-full" />
     </div>
     <div class="carousel-buttons">
       <button @click="prev" class="mr-2">Previous</button>

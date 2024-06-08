@@ -16,7 +16,7 @@ export default {
     return {
       activeIndex: 0,
       intervalId: null, // Menyimpan ID interval untuk dihentikan nanti
-      intervalDelay: 5000, // Waktu antara setiap geser otomatis (dalam milidetik)
+      intervalDelay: 2000, // Waktu antara setiap geser otomatis (dalam milidetik)
       items: [
         {
           image: 'https://hijja.sistemtoko.com/img/user/hijja/media/F3na1Q_slide3.jpg',

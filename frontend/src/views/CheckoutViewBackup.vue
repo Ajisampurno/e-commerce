@@ -1,27 +1,21 @@
 <template>
   <Navigasi />
   <div class="checkout-page container mx-auto p-4 flex flex-wrap lg:flex-nowrap gap-6">
-    <div class="cart w-full lg:w-1/2 bg-white shadow-md rounded-lg border border-grey p-4">
-      <h2 class="text-2xl font-semibold mb-4 text-gray-700">Shopping Cart</h2>
-      <div
-        v-for="item in cartItems"
-        :key="item.id"
-        class="cart-item flex items-center bg-white shadow-md rounded-lg border border-grey p-4 mb-4"
-      >
+    <div class="cart w-full lg:w-1/2 bg-white shadow-md rounded-lg p-4">
+      <h2 class="text-2xl font-semibold mb-4">Shopping Cart</h2>
+      <div v-for="item in cartItems" :key="item.id" class="cart-item flex items-center mb-4">
         <img :src="item.photo" alt="Product Image" class="w-16 h-16 object-cover rounded-md mr-4" />
-        <div class="cart-item-details text-gray-700">
-          <p class="font-semibold text-gray-700">{{ item.name }}</p>
+        <div class="cart-item-details">
+          <p class="font-semibold">{{ item.name }}</p>
           <p>{{ item.selectedVariant.value }}</p>
           <p>Rp.{{ item.price }} x {{ item.quantity }}</p>
         </div>
       </div>
-      <div class="total">
-        <p class="text-gray-700">Total: Rp.{{ totalPayment }}</p>
-        <p class="text-gray-700">Total Shipping Cost: Rp.{{ shippingMethod }}</p>
-        <p class="text-xl font-bold text-gray-700">Grand Total: Rp.{{ grandTotal }}</p>
+      <div class="total text-right">
+        <p class="text-xl font-bold">Total: Rp.{{ totalPayment }}.000;</p>
       </div>
     </div>
-    <div class="checkout-form w-full lg:w-1/2 bg-white shadow-md rounded-lg border border-grey p-4">
+    <div class="checkout-form w-full lg:w-1/2 bg-white shadow-md rounded-lg p-4">
       <h2 class="text-2xl font-semibold mb-4">Checkout</h2>
       <form @submit.prevent="confirmOrder" class="space-y-4">
         <div>
@@ -121,10 +115,13 @@
               :key="method.service"
               :value="method.cost[0].value"
             >
-              {{ method.description }} - Rp.{{ method.cost[0].value }} (ETD:
-              {{ method.cost[0].etd }})
+              {{ method.description }} - {{ method.cost[0].value }} (ETD: {{ method.cost[0].etd }})
             </option>
           </select>
+        </div>
+        <div class="shipping-total text-right">
+          <p>Total Shipping Cost: {{ totalShippingCost }}</p>
+          <p class="text-xl font-bold">Grand Total: Rp.{{ grandTotal }}.000;</p>
         </div>
         <button
           type="submit"
@@ -141,6 +138,8 @@
 <script>
 import Navigasi from '@/components/Navigasi.vue'
 import Footer from '@/components/Footer.vue'
+//const { Snap } = require('midtrans-client')
+import { Snap } from 'midtrans-client'
 
 export default {
   data() {
@@ -157,6 +156,7 @@ export default {
       city: '',
       subdistrict: '',
       shippingMethod: 0,
+      totalShippingCost: 0,
       grandTotal: 0
     }
   },
@@ -198,67 +198,29 @@ export default {
         })
     },
     calculateTotal() {
-      this.grandTotal = this.totalPayment + this.shippingMethod
+      this.totalShippingCost = parseFloat(this.shippingMethod)
+      this.grandTotal = this.totalPayment + this.totalShippingCost
     },
-    async confirmOrder() {
-      try {
-        const response = await fetch('http://localhost:80/php/create-transaction.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            amount: this.grandTotal,
-            name: this.name,
-            email: this.email,
-            phone: this.phone
-          })
-        })
-
-        const result = await response.json()
-
-        if (result.token) {
-          window.snap.pay(result.token, {
-            onSuccess: (result) => {
-              let transactions = JSON.parse(localStorage.getItem('orderDetails'))
-
-              if (!Array.isArray(transactions)) {
-                transactions = []
-              }
-
-              transactions.push(result)
-              localStorage.setItem('orderDetails', JSON.stringify(transactions))
-              localStorage.removeItem('cart')
-              this.$router.push('/orders-list')
-            },
-            onPending: (result) => {
-              alert('Waiting for your payment!')
-              console.log(result)
-            },
-            onError: (result) => {
-              alert('Payment failed!')
-              console.log(result)
-            },
-            onClose: () => {
-              alert('You closed the popup without finishing the payment')
-            }
-          })
-        } else {
-          alert('Failed to get payment token')
-        }
-      } catch (e) {
-        alert('Failed to process your request')
-        console.log(e)
+    confirmOrder() {
+      const orderId = new Date().getTime().toString()
+      const orderDetails = {
+        orderId,
+        name: this.name,
+        email: this.email,
+        phone: this.phone,
+        address: `${this.province} ${this.city} ${this.subdistrict}`,
+        total: this.grandTotal,
+        items: this.cartItems
       }
+
+      localStorage.setItem('orderDetails', JSON.stringify(orderDetails))
+      alert(`Order confirmed! Your order ID is ${orderId}`)
+      this.$router.push('/orders-list')
     }
   },
   computed: {
     totalPayment() {
-      return this.cartItems.reduce((total, item) => {
-        const price = item.price
-        const quantity = item.quantity
-        return total + price * quantity * 1000
-      }, 0)
+      return this.cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
     }
   },
   watch: {
@@ -271,6 +233,7 @@ export default {
     if (cart) {
       this.cartItems = JSON.parse(cart)
     }
+
     this.fetchProvinces()
     this.calculateTotal()
   }

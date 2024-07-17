@@ -3,19 +3,28 @@
     <Navigasi />
     <!-- Products -->
     <section class="max-w-6xl mx-auto mt-11">
-    <h2 class="text-2xl font-semibold mb-4">Products</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        <div v-for="product in filteredProducts" :key="product.id" class="bg-white rounded-lg shadow-md overflow-hidden">
-        <img :src="product.photo" :alt="product.name" class="w-full h-60 object-cover object-center" @click="goToDetail(product.slug)" />
-        <div class="p-4">
+      <h2 class="text-2xl font-semibold mb-4">Products</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div
+          v-for="product in filteredProducts"
+          :key="product.id"
+          class="bg-white rounded-lg shadow-md overflow-hidden"
+        >
+          <img
+            :src="product.photo"
+            :alt="product.name"
+            class="w-full h-60 object-cover object-center"
+            @click="goToDetail(product.slug)"
+          />
+          <div class="p-4">
             <p class="text-xl text-center mb-2">{{ product.name }}</p>
+          </div>
         </div>
-        </div>
-    </div>
+      </div>
     </section>
 
     <section class="py-4 border-b bg-white mx-auto max-w-7xl">
-    <Footer />
+      <Footer />
     </section>
   </div>
 </template>
@@ -38,7 +47,7 @@ export default {
   },
   components: {
     Navigasi,
-    Footer,
+    Footer
   },
   methods: {
     async fetchData() {
@@ -48,7 +57,7 @@ export default {
           id: product.id,
           slug: product.slug,
           name: product.title,
-          photo: "http://demo.sistemtoko.com/img/user/demo/blog/"+product.img,
+          photo: 'http://demo.sistemtoko.com/img/user/demo/blog/' + product.img
         }))
         this.filteredProducts = this.products
       } catch (error) {
@@ -70,7 +79,8 @@ export default {
       }
 
       const existingCartItem = this.cart.find(
-        (item) => item.id === product.id && item.selectedVariant.value === product.selectedVariant.value
+        (item) =>
+          item.id === product.id && item.selectedVariant.value === product.selectedVariant.value
       )
 
       if (existingCartItem) {
@@ -110,7 +120,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .carousel-item {
   display: flex;
   justify-content: center;

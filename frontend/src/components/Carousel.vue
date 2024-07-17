@@ -58,7 +58,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .carousel {
   position: relative;
   overflow: hidden;

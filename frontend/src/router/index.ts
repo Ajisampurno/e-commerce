@@ -8,10 +8,8 @@ import OrderList from '@/views/OrderListView.vue'
 import OrderConfirmation from '@/views/OrderConfirmationView.vue'
 import OrderDetail from '@/views/OrderDetailView.vue'
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
+const routes = [
+  {
     path: '/',
     name: 'Home',
     component: Home
@@ -39,7 +37,7 @@ const router = createRouter({
   },
   {
     path: '/orders-list',
-    name: 'Order',
+    name: 'OrderList',
     component: OrderList
   },
   {
@@ -52,8 +50,12 @@ const router = createRouter({
     path: '/orders-confirmation',
     name: 'OrderConfirmation',
     component: OrderConfirmation
-  },
-  ]
+  }
+]
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes
 })
 
 export default router

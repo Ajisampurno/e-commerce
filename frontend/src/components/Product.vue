@@ -1,12 +1,12 @@
 <template>
   <h2 class="text-2xl font-semibold mb-4">Products</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-      <div
-    v-for="product in filteredProducts"
-    :key="product.id"
-    class="bg-white rounded-lg shadow-md overflow-hidden"
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+    <div
+      v-for="product in filteredProducts"
+      :key="product.id"
+      class="bg-white rounded-lg shadow-md overflow-hidden"
     >
-    <img
+      <img
         :src="product.photo"
         :alt="product.name"
         class="w-full h-60 object-cover object-center"

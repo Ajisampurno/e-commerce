@@ -8,16 +8,20 @@
           <thead class="bg-gray-50">
             <tr>
               <th class="py-2 px-4 border-b text-left">Order ID</th>
-              <th class="py-2 px-4 border-b text-left">Name</th>
+              <th class="py-2 px-4 border-b text-left">Transaction ID</th>
               <th class="py-2 px-4 border-b text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="order in orders" :key="order.orderId">
-              <td class="py-2 px-4 border-b">{{ order.orderId }}</td>
-              <td class="py-2 px-4 border-b">{{ order.name }}</td>
+            <tr v-for="order in orders" :key="order.order_id">
+              <td class="py-2 px-4 border-b">{{ order.order_id }}</td>
+              <td class="py-2 px-4 border-b">{{ order.transaction_id }}</td>
               <td class="py-2 px-4 border-b">
-                <router-link :to="'/orders/' + order.orderId" class="text-indigo-600 hover:text-indigo-900">View Details</router-link>
+                <router-link
+                  :to="'/orders/' + order.order_id"
+                  class="text-indigo-600 hover:text-indigo-900"
+                  >View Details</router-link
+                >
               </td>
             </tr>
           </tbody>
@@ -38,24 +42,24 @@ export default {
   data() {
     return {
       orders: []
-    };
+    }
   },
   components: {
     Navigasi,
     Footer
   },
   mounted() {
-    this.fetchOrders();
+    this.fetchOrders()
   },
   methods: {
     fetchOrders() {
-      const orderDetails = localStorage.getItem('orderDetails');
+      const orderDetails = localStorage.getItem('orderDetails')
       if (orderDetails) {
-        this.orders = [JSON.parse(orderDetails)];
+        this.orders = JSON.parse(orderDetails)
       }
     }
   }
-};
+}
 </script>
 <style scoped>
 .overflow-x-auto {

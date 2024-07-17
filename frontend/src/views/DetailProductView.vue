@@ -8,58 +8,104 @@
         <button @click="toggleMobileMenu" class="text-blue-500 lg:hidden focus:outline-none">
           <span class="material-icons">menu</span>
         </button>
-        <nav :class="{'block': showMobileMenu, 'hidden': !showMobileMenu, 'lg:block': true}">
+        <nav :class="{ block: showMobileMenu, hidden: !showMobileMenu, 'lg:block': true }">
           <!-- Search Product -->
           <ul class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 items-center">
             <li>
-              <input 
-                type="text" 
-                v-model="searchQuery" 
-                @input="searchProducts" 
-                placeholder="Search products" 
+              <input
+                type="text"
+                v-model="searchQuery"
+                @input="searchProducts"
+                placeholder="Search products"
                 class="border rounded-md py-1 px-2"
               />
             </li>
-            <li><router-link to="/" class="text-blue-500 hover:text-blue-700">Home</router-link></li>
+            <li>
+              <router-link to="/" class="text-blue-500 hover:text-blue-700">Home</router-link>
+            </li>
             <li>
               <div class="relative">
-                <button @click="toggleDropdown" class="text-blue-500 hover:text-blue-700">Information</button>
-                <ul v-if="showDropdown" @click.away="closeDropdown" class="absolute right-0 mt-2 py-2 w-40 bg-white rounded-lg shadow-lg z-20">
-                  <li><router-link to="/checkout" class="block px-4 py-2 text-gray-800 hover:bg-blue-100">Checkout</router-link></li>
-                  <li><router-link to="/orders-list" class="block px-4 py-2 text-gray-800 hover:bg-blue-100">Order List</router-link></li>
+                <button @click="toggleDropdown" class="text-blue-500 hover:text-blue-700">
+                  Information
+                </button>
+                <ul
+                  v-if="showDropdown"
+                  @click.away="closeDropdown"
+                  class="absolute right-0 mt-2 py-2 w-40 bg-white rounded-lg shadow-lg z-20"
+                >
+                  <li>
+                    <router-link
+                      to="/checkout"
+                      class="block px-4 py-2 text-gray-800 hover:bg-blue-100"
+                      >Checkout</router-link
+                    >
+                  </li>
+                  <li>
+                    <router-link
+                      to="/orders-list"
+                      class="block px-4 py-2 text-gray-800 hover:bg-blue-100"
+                      >Order List</router-link
+                    >
+                  </li>
                 </ul>
               </div>
             </li>
-            <li><router-link to="/blog" class="text-blue-500 hover:text-blue-700">Blog</router-link></li>
+            <li>
+              <router-link to="/blog" class="text-blue-500 hover:text-blue-700">Blog</router-link>
+            </li>
             <!-- Shopping Cart -->
             <li class="relative">
               <button @click="toggleCart" class="relative">
                 <span class="material-icons">shopping_cart</span>
                 <!-- Show Cart Items Count -->
-                <span v-if="cart.length > 0" class="absolute bottom-4 left-5 bg-red-500 text-white rounded-full px-2 py-1 text-xs">{{ cart.length }}</span>
+                <span
+                  v-if="cart.length > 0"
+                  class="absolute bottom-4 left-5 bg-red-500 text-white rounded-full px-2 py-1 text-xs"
+                  >{{ cart.length }}</span
+                >
               </button>
               <!-- Shopping Cart Dropdown -->
-              <div v-if="showCart" class="absolute top-full right-0 bg-white border border-gray-200 mt-2 rounded-lg shadow-lg z-10 w-80">
+              <div
+                v-if="showCart"
+                class="absolute top-full right-0 bg-white border border-gray-200 mt-2 rounded-lg shadow-lg z-10 w-80"
+              >
                 <div v-if="cart.length > 0" class="p-4">
                   <p class="text-lg font-semibold mb-2">Shopping Cart</p>
                   <ul>
-                    <li v-for="(item, index) in cart" :key="item.id" class="flex justify-between items-center mb-2">
+                    <li
+                      v-for="(item, index) in cart"
+                      :key="item.id"
+                      class="flex justify-between items-center mb-2"
+                    >
                       <div class="flex-1">
                         <span>{{ item.name }}</span>
                         <br />
-                        <span class="text-gray-500 text-sm">Variant: {{ item.selectedVariant }}</span>
+                        <span class="text-gray-500 text-sm"
+                          >Variant: {{ item.selectedVariant }}</span
+                        >
                         <br />
                         <span class="text-gray-500 text-sm">Price: {{ item.price }}</span>
                       </div>
                       <div class="flex items-center">
-                        <button @click="decreaseQuantity(index)" class="text-gray-500 mx-2">-</button>
+                        <button @click="decreaseQuantity(index)" class="text-gray-500 mx-2">
+                          -
+                        </button>
                         <span>{{ item.quantity }}</span>
-                        <button @click="increaseQuantity(index)" class="text-gray-500 mx-2">+</button>
+                        <button @click="increaseQuantity(index)" class="text-gray-500 mx-2">
+                          +
+                        </button>
                       </div>
-                      <button @click="removeFromCart(index)" class="text-red-500 ml-4">Remove</button>
+                      <button @click="removeFromCart(index)" class="text-red-500 ml-4">
+                        Remove
+                      </button>
                     </li>
                   </ul>
-                  <button @click="toggleCart" class="block w-full bg-blue-500 text-white py-2 px-4 rounded-lg mt-4">Close</button>
+                  <button
+                    @click="toggleCart"
+                    class="block w-full bg-blue-500 text-white py-2 px-4 rounded-lg mt-4"
+                  >
+                    Close
+                  </button>
                 </div>
                 <div v-else class="p-4">
                   <p>Your cart is empty</p>
@@ -70,14 +116,18 @@
         </nav>
       </div>
     </header>
-    
+
     <main class="py-8">
       <!-- Product Details -->
       <section class="max-w-6xl mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Product Image -->
           <div>
-            <img :src="product.photo" :alt="product.name" class="w-full h-96 object-cover object-center rounded-lg shadow-md" />
+            <img
+              :src="product.photo"
+              :alt="product.name"
+              class="w-full h-96 object-cover object-center rounded-lg shadow-md"
+            />
           </div>
           <!-- Product Info -->
           <div>
@@ -86,14 +136,29 @@
             <p class="text-lg text-gray-600 mb-4">Stock: {{ product.stock }}</p>
             <!-- Variant Dropdown -->
             <div class="mt-4">
-              <label for="variants" class="block text-sm font-medium text-gray-700">Variants:</label>
-              <select v-model="selectedVariant" id="variants" name="variants" class="block w-full bg-white border border-gray-300 text-gray-700 py-2 px-3 rounded-md leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+              <label for="variants" class="block text-sm font-medium text-gray-700"
+                >Variants:</label
+              >
+              <select
+                v-model="selectedVariant"
+                id="variants"
+                name="variants"
+                class="block w-full bg-white border border-gray-300 text-gray-700 py-2 px-3 rounded-md leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              >
                 <option disabled value="" selected>Select a variant</option>
                 <option>{{ product.varian }}</option>
               </select>
             </div>
             <!-- Add to Cart Button -->
-            <button @click="addToCart" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md w-full" :disabled="!selectedVariant">
+            <button
+              @click="addToCart"
+              class="mt-4 font-bold py-2 px-4 rounded-md w-full"
+              :class="{
+                'bg-blue-500 hover:bg-blue-700 text-white': selectedVariant,
+                'bg-gray-500 text-gray-300 cursor-not-allowed': !selectedVariant
+              }"
+              :disabled="!selectedVariant"
+            >
               Add to Cart
             </button>
             <!-- Product Description -->
@@ -114,6 +179,7 @@
 
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2'
 import Footer from '@/components/Footer.vue'
 
 export default {
@@ -139,7 +205,7 @@ export default {
           id: response.data.id,
           name: response.data.product_name,
           price: response.data.product_buy_price,
-          photo: "https://sistemtoko.com/img/user/demo/product/"+response.data.product_img,
+          photo: 'https://sistemtoko.com/img/user/demo/product/' + response.data.product_img,
           varian: response.data.varian_keyword_value,
           stock: response.data.product_qty_stock,
           description: response.data.user_description
@@ -149,7 +215,9 @@ export default {
       }
     },
     addToCart() {
-      const existingCartItem = this.cart.find(item => item.id === this.product.id && item.selectedVariant === this.selectedVariant)
+      const existingCartItem = this.cart.find(
+        (item) => item.id === this.product.id && item.selectedVariant === this.selectedVariant
+      )
       if (existingCartItem) {
         existingCartItem.quantity++
       } else {
@@ -160,6 +228,12 @@ export default {
         }
         this.cart.push(cartItem)
       }
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: 'Produk berhasil dimasukan ke keranjang',
+        confirmButtonText: 'OK'
+      })
       localStorage.setItem('cart', JSON.stringify(this.cart))
     },
     removeFromCart(index) {
@@ -182,10 +256,10 @@ export default {
       this.showCart = !this.showCart
     },
     toggleDropdown() {
-      this.showDropdown = !this.showDropdown;
+      this.showDropdown = !this.showDropdown
     },
     closeDropdown() {
-      this.showDropdown = false;
+      this.showDropdown = false
     },
     toggleMobileMenu() {
       this.showMobileMenu = !this.showMobileMenu
@@ -197,7 +271,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .carousel-item {
   display: flex;
   justify-content: center;
